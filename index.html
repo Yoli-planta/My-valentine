@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Nuestra Historia 💖</title>
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    overflow:hidden;
+    font-family: 'Georgia', serif;
+    background: radial-gradient(circle at top, #1e1e2f, #0f0f1a);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+}
+
+/* CONTENEDOR */
+.screen{
+    text-align:center;
+    max-width:500px;
+    position:relative;
+}
+
+/* BOTONES */
+button{
+    padding:12px 22px;
+    border:none;
+    border-radius:25px;
+    background:#ff4da6;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    transform:scale(1.1);
+}
+
+/* CORAZONES JUEGO */
+.heart{
+    position:absolute;
+    width:25px;
+    height:25px;
+    background:#ff4da6;
+    transform:rotate(45deg);
+    cursor:pointer;
+    animation:floatUp 4s linear forwards;
+}
+
+.heart:before,
+.heart:after{
+    content:"";
+    position:absolute;
+    width:25px;
+    height:25px;
+    background:#ff4da6;
+    border-radius:50%;
+}
+
+.heart:before{
+    top:-12px;
+    left:0;
+}
+
+.heart:after{
+    left:-12px;
+    top:0;
+}
+
+@keyframes floatUp{
+    0%{transform:translateY(100vh) rotate(45deg); opacity:1;}
+    100%{transform:translateY(-20vh) rotate(45deg); opacity:0;}
+}
+
+/* CARTA */
+.letter{
+    background:white;
+    color:#333;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.4);
+    transform:scale(0);
+    transition:0.8s;
+}
+
+.counter{
+    margin-top:15px;
+    font-weight:bold;
+    color:#ff4da6;
+}
+
+.final{
+    margin-top:10px;
+    opacity:0;
+    transition:2s;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="screen" id="screen">
+    <h1>¿Estás listo para descubrir algo? 💌</h1>
+    <button onclick="startGame()">Sí</button>
+</div>
+
+<script>
+
+let score = 0;
+
+function startGame(){
+    document.getElementById("screen").innerHTML =
+    "<h2>Atrapa 5 corazones para desbloquear tu sorpresa 💖</h2>";
+
+    const interval = setInterval(createHeart,600);
+
+    setTimeout(()=>{
+        clearInterval(interval);
+    },10000);
+}
+
+function createHeart(){
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.style.left = Math.random()*90 + "vw";
+
+    heart.onclick = function(){
+        heart.remove();
+        score++;
+        if(score >= 5){
+            showLetter();
+        }
+    };
+
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),4000);
+}
+
+function showLetter(){
+    document.body.innerHTML = `
+    <div class="screen">
+        <div class="letter" id="letter">
+            <h2>Feliz San Valentín 💘</h2>
+            <p>Desde que llegaste a mi vida, todo tiene más sentido, más luz y más amor.</p>
+            <div class="counter" id="counter"></div>
+            <div class="final" id="final">
+                Y elegiría volver a encontrarte en cada vida que exista ❤️
+            </div>
+        </div>
+    </div>
+    `;
+
+    setTimeout(()=>{
+        document.getElementById("letter").style.transform="scale(1)";
+    },200);
+
+    startCounter();
+}
+
+function startCounter(){
+
+    // CAMBIA ESTA FECHA
+    const startDate = new Date("2025-12-01");
+
+    setInterval(()=>{
+        const now = new Date();
+        const diff = now - startDate;
+
+        const days = Math.floor(diff/(1000*60*60*24));
+        const hours = Math.floor(diff/(1000*60*60)%24);
+        const minutes = Math.floor(diff/(1000*60)%60);
+
+        document.getElementById("counter").innerHTML =
+        `Llevamos ${days} días, ${hours} horas y ${minutes} minutos juntos 💞`;
+
+    },1000);
+
+    setTimeout(()=>{
+        document.getElementById("final").style.opacity="1";
+    },3000);
+}
+
+</script>
+
+</body>
+</html>
